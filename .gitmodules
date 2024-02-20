@@ -1,0 +1,4 @@
+[submodule "plato"]
+	path = plato
+	url = https://github.com/baskerville/plato.git
+	branch = master
