@@ -3,7 +3,7 @@ Emulator and builder Docker containers for Plato (a document reader for Kobo e-r
 
 ## Usage
 
-Initially, get the original plato repo and make shell files executable: 
+Initially, get the original plato repo and make shell files executable:
 ```sh
 $ cd plato-in-container
 $ git submodule update --init
@@ -17,4 +17,12 @@ $ ./docker-run-plato-gcc-linaro-builder.sh
 
 # ./build.sh
 # ./dist.sh
+```
+
+For running emulator and accessing graphics device inside the container:
+```sh
+$ ./docker-build-plato-emulator.sh
+$ ./docker-run-plato-emulator.sh
+
+# ./run-emulator.sh
 ```
