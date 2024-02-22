@@ -1,9 +1,16 @@
-# plato-in-container
+# Plato in container
+
 Emulator and builder Docker containers for [Plato](https://github.com/baskerville/plato) (a document reader for Kobo e-readers)
+
+## About
+
+The `Plato` Docker images are designed as `development containers`, designed to minimize `cargo build` time during the container execution time, to compile and test `Plato`'s code as fast as possible.
+
+Currently, Docker images are prototypes and work-in-progress; the Docker images are fat (`builder`: ~2GB, `emulator`: ~3.8GB), `docker build` can take a long time and the containers probably run with more than necessary [options](https://docs.docker.com/engine/reference/run/#options).
 
 ## Motivation
 
-Kobo devices require a specific `arm-linux-gnueabihf-gcc` version ([Linaro GCC 4.9-2017.01](https://github.com/kobolabs/Kobo-Reader/tree/master/toolchain)) to compile the required Plato packages to be able to run Plato successfully on e-readers. (At least, I could not get Plato to work with Debian's stable repo's compiler version for the e-reader.) On the Plato emulator side; this time, emulator asks for a specific [MuPDF](https://mupdf.com/) version to be up and running.
+Kobo devices require a specific `arm-linux-gnueabihf-gcc` version ([Linaro GCC 4.9-2017.01](https://github.com/kobolabs/Kobo-Reader/tree/master/toolchain)) to compile the required Plato packages to be able to run Plato successfully on e-readers. (At least, I could not get Plato to work with Debian's stable repo's compiler version for the e-reader.) On the Plato `emulator` side; this time, emulator asks for a specific [MuPDF](https://mupdf.com/) version to be up and running.
 
 Inspired by [Jessie Frazelle](https://github.com/jessfraz)'s old blog post about [Docker containers on the desktop](https://blog.jessfraz.com/post/docker-containers-on-the-desktop/), not wanting the dependency files to spread everywhere and trying to avoid [dependency hell](https://en.wikipedia.org/wiki/Dependency_hell) on the host machine, this repo tries to diminish the file situation with Docker containers.
 
