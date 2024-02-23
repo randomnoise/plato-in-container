@@ -49,3 +49,13 @@ Emulator running inside Docker container and using local machine's display:
 Home Screen  |  Reader Screen
 -------------|-----------------
 ![01-plato-emulator-home-screen](https://github.com/randomnoise/plato-in-container/assets/8210848/bacf42c2-17e0-407f-be83-c537e7e0ef0e "Plato home screen") | ![02-plato-emulator-reader-screen](https://github.com/randomnoise/plato-in-container/assets/8210848/a05f55ef-aea4-4c63-86b5-0a85b0c02f63 "Plato reader screen")
+
+## Rationale
+
+The reason `Plato in Container` is a separate repository and not a part of the original [Plato](https://github.com/baskerville/plato) repo is that these are not the first attempt at creating `docker image`s for Plato. It appears the previous `Dockerfile`s were removed from Plato's repo because of a [lack of maintenance](https://github.com/baskerville/plato/commit/573a573) and it seems that Plato's maintainer was [not using](https://github.com/baskerville/plato/issues/255#issuecomment-1230743385) them. On the under hand, `emulator` image required `MuPDF` libraries to be installed on the host.
+
+I don't want to burden the maintainer with a similar PR without a track record. The separate repo also opens up an opportunity to experiment with Docker using `git subtrees`, `git submodules` and `symbolic links` to the locally cloned repo directories.
+
+For reference, the previous Dockerfiles' history:
+- [Dockerfile commits (builder)](https://github.com/baskerville/plato/commits/master/Dockerfile)
+- [Dockerfile.dev commits (emulator)](https://github.com/baskerville/plato/commits/master/Dockerfile.dev)
