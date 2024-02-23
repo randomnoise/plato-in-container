@@ -48,7 +48,7 @@ Emulator running inside Docker container and using local machine's display:
 
 Home Screen  |  Reader Screen
 -------------|-----------------
-![01-plato-emulator-home-screen](https://github.com/randomnoise/plato-in-container/assets/8210848/bacf42c2-17e0-407f-be83-c537e7e0ef0e "Plato home screen") | ![02-plato-emulator-reader-screen](https://github.com/randomnoise/plato-in-container/assets/8210848/a05f55ef-aea4-4c63-86b5-0a85b0c02f63 "Plato reader screen")
+![01-plato-emulator-home-screen](./screenshots/01-plato-emulator-home-screen.png "Plato home screen") | ![02-plato-emulator-reader-screen](./screenshots/02-plato-emulator-reader-screen.png "Plato reader screen")
 
 ## Rationale
 
