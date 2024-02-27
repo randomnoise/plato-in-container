@@ -53,3 +53,5 @@ COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/thirdparty/mupdf/ /usr/
 COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/plato-0.9.40.zip /usr/src/plato/
 
 COPY . .
+
+CMD [ "bash", "-c", "./build.sh && ./dist.sh" ]
