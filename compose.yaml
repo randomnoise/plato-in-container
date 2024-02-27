@@ -1,0 +1,6 @@
+services:
+  plato-builder:
+    build:
+      context: ./plato
+      dockerfile: ../gcc-linaro-builder.Dockerfile
+    image: local-plato-gcc-linaro-builder
