@@ -27,11 +27,15 @@ $ chmod -v +x docker-*.sh
 
 For building and getting the package ready for using on Kobo e-readers:
 ```sh
-$ ./docker-build-plato-gcc-linaro-builder.sh
-$ ./docker-run-plato-gcc-linaro-builder.sh
+$ docker compose build
+$ docker compose run --rm plato-builder
+```
+or
 
-# ./build.sh
-# ./dist.sh
+```sh
+$ docker compose build
+$ docker compose run --rm plato-builder bash
+in-container$ ./build.sh && ./dist.sh
 ```
 
 ### Emulator
