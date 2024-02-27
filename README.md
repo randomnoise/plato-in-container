@@ -20,14 +20,13 @@ Initially, get the original `Plato` repo and make the shell files executable:
 ```sh
 $ cd plato-in-container
 $ git submodule update --init
-$ chmod -v +x docker-*.sh
 ```
 
 ### Builder
 
 For building and getting the package ready for using on Kobo e-readers:
 ```sh
-$ docker compose build
+$ docker compose build plato-builder
 $ docker compose run --rm plato-builder
 ```
 or
@@ -42,10 +41,8 @@ in-container$ ./build.sh && ./dist.sh
 
 For running the emulator and accessing the graphics device inside the container:
 ```sh
-$ ./docker-build-plato-emulator.sh
-$ ./docker-run-plato-emulator.sh
-
-# ./run-emulator.sh
+$ docker compose build plato-emulator
+$ docker compose run --rm plato-emulator
 ```
 
 Emulator running inside Docker container and using local machine's display:

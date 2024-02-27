@@ -87,3 +87,5 @@ COPY --from=plato-emulator-libs $CARGO_HOME/registry/cache/ $CARGO_HOME/registry
 COPY --from=plato-emulator-libs /usr/src/plato/target/ /usr/src/plato/target/
 COPY . /usr/src/plato/
 COPY --from=plato-emulator-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
+
+CMD [ "./run-emulator.sh" ]

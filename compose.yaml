@@ -6,3 +6,16 @@ services:
     image: local-plato-gcc-linaro-builder
     volumes:
       - ./dist:/usr/src/plato/dist
+
+  plato-emulator:
+    build:
+      context: ./plato
+      dockerfile: ../emulator.Dockerfile
+    image: local-plato-emulator
+    devices:
+      - dev/dri
+    environment:
+      - DISPLAY=unix${DISPLAY}
+    network_mode: "host"
+    volumes:
+      - ~/.Xauthority:/root/.Xauthority
