@@ -19,3 +19,11 @@ services:
     network_mode: "host"
     volumes:
       - ~/.Xauthority:/root/.Xauthority
+
+  debian-repo-builder:
+    build:
+      context: ./plato
+      dockerfile: ../debian-repo-builder.Dockerfile
+    image: local-debian-repo-plato-builder
+    volumes:
+      - ./dist:/usr/src/plato/dist

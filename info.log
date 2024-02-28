@@ -1,0 +1,22 @@
+# debian-repo -builder made this; it doesn't work on kobo
+$ file dist/plato
+dist/plato: ELF 32-bit LSB pie executable, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, BuildID[sha1]=a7326487e07d912dd755e68da81c6374904f955f, for GNU/Linux 3.2.0, stripped
+
+# compiled by me, works on Kobo
+$ file bin-backup/plato-backup-0.9.41
+bin-backup/plato-backup-0.9.41: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 2.6.31, BuildID[sha1]=28ad8e7df7d1fb5664bd8385d4321211605c36e5, stripped
+
+# release binary, probably works on Kobo
+$ file ~/Downloads/plato-0.9.41/plato
+/plato-0.9.41/plato: ELF 32-bit LSB shared object, ARM, EABI5 version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux-armhf.so.3, for GNU/Linux 2.6.31, BuildID[sha1]=44506f3bc8d9cf6444fc20659597a217bbecde1c, stripped
+
+on Kobo, debian-repo-builder plato writes to info.log:
+./plato: /lib/libm.so.6: version `GLIBC_2.35' not found (required by ./plato)
+./plato: /lib/libm.so.6: version `GLIBC_2.27' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.32' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.27' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.25' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.29' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.33' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.28' not found (required by ./plato)
+./plato: /lib/libc.so.6: version `GLIBC_2.34' not found (required by ./plato)
