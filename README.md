@@ -16,7 +16,7 @@ Inspired by [Jessie Frazelle](https://github.com/jessfraz)'s old blog post about
 
 ## Usage
 
-Initially, get the original `Plato` repo and make the shell files executable:
+Initially, get the original `Plato` repo:
 ```sh
 $ cd plato-in-container
 $ git submodule update --init
