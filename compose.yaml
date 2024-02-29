@@ -19,3 +19,11 @@ services:
     network_mode: "host"
     volumes:
       - ~/.Xauthority:/root/.Xauthority
+
+  new-plato-builder:
+    build:
+      context: ./plato
+      dockerfile: ../new-gcc-linaro-builder.Dockerfile
+    image: local-plato-new-linaro-builder
+    volumes:
+      - ./dist:/usr/src/plato/dist
