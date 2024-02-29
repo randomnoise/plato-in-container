@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-FROM rust:1.76-slim-bookworm AS plato-gcc-linaro-builder-base
+FROM rust:1.76-slim-bookworm AS plato-builder-base
 
 ARG PLATO_CURRENT_VERSION=0.9.41
 
@@ -27,7 +27,7 @@ RUN dpkg --add-architecture armhf \
 ENV PATH=/gcc-linaro/bin:$PATH
 
 
-FROM plato-gcc-linaro-builder-base AS plato-gcc-linaro-builder-libs
+FROM plato-builder-base AS plato-builder-libs
 
 RUN apt-get update \
  && apt-get install --no-install-recommends --yes \
@@ -59,19 +59,19 @@ RUN cd /usr/src/ \
  && ./build.sh
 
 
-FROM plato-gcc-linaro-builder-base AS plato-gcc-linaro-builder
+FROM plato-builder-base AS plato-builder
 
-COPY --from=plato-gcc-linaro-builder-libs /gcc-linaro/ /gcc-linaro/
+COPY --from=plato-builder-libs /gcc-linaro/ /gcc-linaro/
 
 # Rust crate caching:
 # https://doc.rust-lang.org/cargo/guide/cargo-home.html#caching-the-cargo-home-in-ci
-COPY --from=plato-gcc-linaro-builder-libs $CARGO_HOME/registry/index/ $CARGO_HOME/registry/index/
-COPY --from=plato-gcc-linaro-builder-libs $CARGO_HOME/registry/cache/ $CARGO_HOME/registry/cache/
+COPY --from=plato-builder-libs $CARGO_HOME/registry/index/ $CARGO_HOME/registry/index/
+COPY --from=plato-builder-libs $CARGO_HOME/registry/cache/ $CARGO_HOME/registry/cache/
 
-COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/libs/ /usr/src/plato/libs/
-COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/target/ /usr/src/plato/target/
-COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
-COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/plato-${PLATO_CURRENT_VERSION}.zip /usr/src/plato/
+COPY --from=plato-builder-libs /usr/src/plato/libs/ /usr/src/plato/libs/
+COPY --from=plato-builder-libs /usr/src/plato/target/ /usr/src/plato/target/
+COPY --from=plato-builder-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
+COPY --from=plato-builder-libs /usr/src/plato/plato-${PLATO_CURRENT_VERSION}.zip /usr/src/plato/
 
 WORKDIR /usr/src/plato
 
