@@ -1,6 +1,8 @@
 # syntax=docker/dockerfile:1
 FROM rust:1.76-slim-bookworm AS plato-gcc-linaro-builder-base
 
+ARG PLATO_CURRENT_VERSION=0.9.41
+
 # install dependencies
 ARG DEBIAN_FRONTEND=noninteractive
 RUN dpkg --add-architecture armhf \
@@ -50,7 +52,7 @@ COPY --from=plato-gcc-linaro-builder-libs $CARGO_HOME/registry/cache/ $CARGO_HOM
 COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/libs/ /usr/src/plato/libs/
 COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/target/ /usr/src/plato/target/
 COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
-COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/plato-0.9.40.zip /usr/src/plato/
+COPY --from=plato-gcc-linaro-builder-libs /usr/src/plato/plato-${PLATO_CURRENT_VERSION}.zip /usr/src/plato/
 
 COPY . .
 
