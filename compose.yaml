@@ -19,7 +19,7 @@ services:
       dockerfile: ../emulator.Dockerfile
     image: local-plato-emulator
     devices:
-      - dev/dri
+      - /dev/dri/card0
     environment:
       - DISPLAY=unix${DISPLAY}
     network_mode: "host"
