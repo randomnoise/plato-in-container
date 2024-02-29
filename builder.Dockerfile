@@ -77,4 +77,4 @@ WORKDIR /usr/src/plato
 
 COPY . .
 
-CMD [ "bash", "-c", "./build.sh && ./dist.sh" ]
+CMD [ "./build.sh" ]

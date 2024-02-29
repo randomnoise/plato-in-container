@@ -6,6 +6,12 @@ services:
     image: local-plato-builder
     volumes:
       - ./dist:/usr/src/plato/dist
+      - ./logs:/usr/src/plato/logs
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./plato/crates/
+          target: /usr/src/plato/crates/
 
   plato-emulator:
     build:
@@ -19,3 +25,9 @@ services:
     network_mode: "host"
     volumes:
       - ~/.Xauthority:/root/.Xauthority
+      - ./logs:/usr/src/plato/logs
+    develop:
+      watch:
+        - action: sync+restart
+          path: ./plato/crates/
+          target: /usr/src/plato/crates/
