@@ -1,58 +1,98 @@
 # syntax=docker/dockerfile:1
-FROM rust:1.76-slim-bookworm AS plato-emulator-base
 
-ARG DEBIAN_FRONTEND=noninteractive
+ARG MUPDF_VERSION=1.23.6
+
+FROM rust:1.76-slim-bookworm AS mupdf-libs
+
+ARG MUPDF_VERSION
+
+ADD https://mupdf.com/downloads/archive/mupdf-${MUPDF_VERSION}-source.tar.gz /
+
+# MuPDF dependencies:
+# https://mupdf.readthedocs.io/en/latest/quick-start-guide.html#linux
 RUN apt-get update \
  && apt-get install --no-install-recommends --yes \
-    jq \
-    libdjvulibre-dev \
-    libgumbo-dev \
-    libharfbuzz-dev \
-    libjbig2dec0-dev \
-    libopenjp2-7-dev \
-    libsdl2-dev \
-    libstdc++-12-dev \
-    libtool \
     make \
-    patch \
-    pkg-config \
-    unzip \
-    wget \
- && rm --recursive --force /var/lib/apt/lists/*
+    g++ \
+    mesa-common-dev \
+    libgl1-mesa-dev \
+    libglu1-mesa-dev \
+    xorg-dev \
+    libxcursor-dev \
+    libxrandr-dev \
+# clean up
+ && apt-get clean \
+ && rm --recursive --force \
+    /var/lib/apt/lists/* \
+    /usr/share/doc/ \
+    /usr/share/man/ \
+    /tmp/* \
+    /var/tmp/*
+
+RUN tar --extract --gzip --verbose \
+    --file mupdf-${MUPDF_VERSION}-source.tar.gz \
+ && cd mupdf-${MUPDF_VERSION}-source \
+ && make prefix=/usr/local install
+
+FROM rust:1.76-slim-bookworm AS plato-emulator-base
+
+COPY --from=mupdf-libs /usr/local/bin/ /usr/local/bin/
+COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
+COPY --from=mupdf-libs /usr/local/include/ /usr/local/include/
+
+RUN apt-get update \
+ && apt-get install --no-install-recommends --yes \
+    libstdc++-12-dev \
+    libsdl2-dev \
+    libdjvulibre-dev \
+    libharfbuzz-dev \
+    libgumbo-dev \
+    libopenjp2-7-dev \
+    libjbig2dec0-dev \
+# clean up
+ && apt-get clean \
+ && rm --recursive --force \
+    /var/lib/apt/lists/* \
+    /usr/share/doc/ \
+    /usr/share/man/ \
+    /usr/local/share/doc/* \
+    /usr/local/share/man/* \
+    /tmp/* \
+    /var/tmp/*
 
 ENV CARGO_TARGET_OS=linux
 
 WORKDIR /usr/src/plato
 
-
 FROM plato-emulator-base AS plato-emulator-libs
 
-# MuPDF depencendies
-ARG DEBIAN_FRONTEND=noninteractive
+ARG MUPDF_VERSION
+
 RUN apt-get update \
  && apt-get install --no-install-recommends --yes \
-    g++ \
     git \
-    libglu1-mesa-dev \
- && rm --recursive --force /var/lib/apt/lists/*
-
-RUN cd /tmp \
- && wget -q --show-progress "https://mupdf.com/downloads/archive/mupdf-1.23.6-source.tar.gz" -O - \
-  | tar -xz \
- && cd /tmp/mupdf-1.23.6-source \
- && make build=release libs apps \
- && make build=release prefix=usr install \
- && find usr/include usr/share usr/lib -type f -exec chmod 0644 {} + \
- && cp -r usr/* /usr/
+# clean up
+ && apt-get clean \
+ && rm --recursive --force \
+    /var/lib/apt/lists/* \
+    /usr/share/doc/ \
+    /usr/share/man/ \
+    /usr/local/share/doc/* \
+    /usr/local/share/man/* \
+    /tmp/* \
+    /var/tmp/*
 
 # Download and build plato's parts
 RUN cd /usr/src/ \
  && git clone --depth 1 https://github.com/baskerville/plato.git \
  && git config --global --add safe.directory /usr/src/plato
 
- # Download and build plato's parts
-RUN cd /usr/src/plato/thirdparty \
- && ./download.sh mupdf
+COPY --from=mupdf-libs /mupdf-${MUPDF_VERSION}-source.tar.gz /usr/src/plato/thirdparty/
+RUN cd /usr/src/plato/thirdparty/ \
+ && mkdir -p mupdf \
+ && tar -xz --strip-components 1 --directory mupdf \
+    --file mupdf-${MUPDF_VERSION}-source.tar.gz \
+ && rm --verbose mupdf-${MUPDF_VERSION}-source.tar.gz
 
 RUN cd /usr/src/plato/mupdf_wrapper \
  && ./build.sh \
@@ -60,23 +100,7 @@ RUN cd /usr/src/plato/mupdf_wrapper \
  && cargo test \
  && cargo build --all-features
 
-
 FROM plato-emulator-base AS plato-emulator
-
-RUN apt-get update \
- && apt-get install --no-install-recommends --yes \
-    libfreetype6 \
-    libgl1-mesa-dri \
-    libsdl2-2.0-0 \
- && rm --recursive --force /var/lib/apt/lists/*
-
-# Deal with MuPDF libraries
-COPY --from=plato-emulator-libs /tmp/ /tmp/
-RUN cd /tmp/mupdf-1.23.6-source \
- && make build=release prefix=usr install \
- && find usr/include usr/share usr/lib -type f -exec chmod 0644 {} + \
- && cp -r usr/* /usr/ \
- && rm -rf /tmp/mupdf-1.23.6-source
 
 # Rust crate caching:
 # https://doc.rust-lang.org/cargo/guide/cargo-home.html#caching-the-cargo-home-in-ci
