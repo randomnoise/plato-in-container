@@ -25,6 +25,7 @@ services:
     network_mode: "host"
     volumes:
       - ~/.Xauthority:/root/.Xauthority
+      - /etc/localtime:/etc/localtime:ro
       - ./logs:/usr/src/plato/logs
     develop:
       watch:
