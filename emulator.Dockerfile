@@ -1,10 +1,11 @@
 # syntax=docker/dockerfile:1
 
+ARG RUST_VERSION=1.78
 ARG MUPDF_VERSION=1.23.6
 # sha1 checksum: https://mupdf.com/releases/
 ARG MUPDF_FILE_CHECKSUM=8466c6c1be6b5721db6c669c7c62dc35aa03bd59
 
-FROM rust:1.78-slim-bookworm AS mupdf-file
+FROM rust:${RUST_VERSION}-slim-bookworm AS mupdf-file
 
     ARG MUPDF_VERSION
     ARG MUPDF_FILE_CHECKSUM
@@ -42,7 +43,7 @@ FROM mupdf-file AS mupdf-libs
     && cd mupdf-${MUPDF_VERSION}-source \
     && make prefix=/usr/local install
 
-FROM rust:1.78-slim-bookworm AS plato-emulator-base
+FROM rust:${RUST_VERSION}-slim-bookworm AS plato-emulator-base
 
     COPY --from=mupdf-libs /usr/local/bin/ /usr/local/bin/
     COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
