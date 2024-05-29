@@ -5,7 +5,7 @@ ARG MUPDF_VERSION=1.23.11
 # sha1 checksum: https://mupdf.com/releases/
 ARG MUPDF_FILE_CHECKSUM=ec9e63a7cdd0f50569f240f91f048f37fa972c47
 
-FROM rust:${RUST_VERSION}-slim-bookworm AS mupdf-file
+FROM debian:bookworm-slim AS mupdf-file
 
     ARG MUPDF_VERSION
     ARG MUPDF_FILE_CHECKSUM
