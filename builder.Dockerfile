@@ -32,7 +32,9 @@ FROM plato-builder-base AS plato-builder-libs
 
    RUN apt-get update \
    && apt-get install --no-install-recommends --yes \
+      cmake \
       git \
+      make \
       xz-utils \
    # clean up
    && rm --recursive --force \

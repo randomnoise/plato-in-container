@@ -51,6 +51,7 @@ FROM rust:${RUST_VERSION}-slim-bookworm AS plato-emulator-base
 
     RUN apt-get update \
     && apt-get install --no-install-recommends --yes \
+        cmake \
         libstdc++-12-dev \
         libsdl2-dev \
         libdjvulibre-dev \
@@ -58,6 +59,7 @@ FROM rust:${RUST_VERSION}-slim-bookworm AS plato-emulator-base
         libgumbo-dev \
         libopenjp2-7-dev \
         libjbig2dec0-dev \
+        make \
     # clean up
     && apt-get clean \
     && rm --recursive --force \
