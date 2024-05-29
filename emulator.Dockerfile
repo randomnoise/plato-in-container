@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 
 ARG RUST_VERSION=1.78
-ARG MUPDF_VERSION=1.23.6
+ARG MUPDF_VERSION=1.23.11
 # sha1 checksum: https://mupdf.com/releases/
-ARG MUPDF_FILE_CHECKSUM=8466c6c1be6b5721db6c669c7c62dc35aa03bd59
+ARG MUPDF_FILE_CHECKSUM=ec9e63a7cdd0f50569f240f91f048f37fa972c47
 
 FROM rust:${RUST_VERSION}-slim-bookworm AS mupdf-file
 
