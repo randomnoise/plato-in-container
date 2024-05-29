@@ -6,7 +6,7 @@ Emulator and builder Docker containers for [Plato](https://github.com/baskervill
 
 The `Plato` Docker images are designed as `development containers`, designed to minimize `cargo build` time during the container execution time, to compile and test `Plato`'s code as fast as possible.
 
-Currently, Docker images are prototypes and work-in-progress; the Docker images are fat (`builder`: ~2GB, `emulator`: ~3.8GB), `docker build` can take a long time and the containers probably run with more than necessary [options](https://docs.docker.com/engine/reference/run/#options).
+Currently, Docker images are prototypes and work-in-progress; the Docker images are fat (`builder`: ~1.8GB, `emulator`: ~3.1GB), `docker build` can take a long time and the containers probably run with more than necessary [options](https://docs.docker.com/engine/reference/run/#options).
 
 ## Motivation
 
