@@ -31,12 +31,7 @@ FROM mupdf-file AS mupdf-libs
         libxrandr-dev \
     # clean up
     && apt-get clean \
-    && rm --recursive --force \
-        /var/lib/apt/lists/* \
-        /usr/share/doc/ \
-        /usr/share/man/ \
-        /tmp/* \
-        /var/tmp/*
+    && rm --recursive --force /var/lib/apt/lists/*
 
     RUN tar --extract --gzip --verbose \
         --file mupdf-${MUPDF_VERSION}-source.tar.gz \
@@ -84,14 +79,7 @@ FROM plato-emulator-base AS plato-emulator-libs
         git \
     # clean up
     && apt-get clean \
-    && rm --recursive --force \
-        /var/lib/apt/lists/* \
-        /usr/share/doc/ \
-        /usr/share/man/ \
-        /usr/local/share/doc/* \
-        /usr/local/share/man/* \
-        /tmp/* \
-        /var/tmp/*
+    && rm --recursive --force /var/lib/apt/lists/*
 
     # Download and build plato's parts
     RUN cd /usr/src/ \

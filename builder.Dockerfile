@@ -31,19 +31,14 @@ FROM rust:${RUST_VERSION}-slim-bookworm AS plato-builder-base
 FROM plato-builder-base AS plato-builder-libs
 
    RUN apt-get update \
-   && apt-get install --no-install-recommends --yes \
-      cmake \
-      git \
-      make \
-      xz-utils \
-   # clean up
-   && rm --recursive --force \
-      /var/lib/apt/lists/* \
-      /usr/share/doc/ \
-      /usr/share/man/ \
-      /tmp/* \
-      /var/tmp/* \
-   && apt-get clean
+    && apt-get install --no-install-recommends --yes \
+       cmake \
+       git \
+       make \
+       xz-utils \
+    #  clean up
+    && apt-get clean \
+    && rm --recursive --force /var/lib/apt/lists/*
 
    # download and extract gcc linaro to $PATH
    # checksum is same with the Kobo Reader's toolchain Git LFS file reference:
