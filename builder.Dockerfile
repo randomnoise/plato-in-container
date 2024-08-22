@@ -2,7 +2,7 @@
 
 FROM rust:1.80-slim-bookworm AS plato-builder-base
 
-    ARG PLATO_CURRENT_VERSION=0.9.42
+    ARG PLATO_CURRENT_VERSION=0.9.43
 
     # install dependencies
     ARG DEBIAN_FRONTEND=noninteractive
