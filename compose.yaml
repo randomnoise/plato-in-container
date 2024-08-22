@@ -3,7 +3,7 @@ services:
     build:
       context: ./plato
       dockerfile: ../builder.Dockerfile
-    image: local-plato-builder
+    image: local-plato:builder
     volumes:
       - ./dist:/usr/src/plato/dist
       - ./logs:/usr/src/plato/logs
@@ -17,7 +17,7 @@ services:
     build:
       context: ./plato
       dockerfile: ../emulator.Dockerfile
-    image: local-plato-emulator
+    image: local-plato:emulator
     devices:
       - /dev/dri/card0
     environment:
