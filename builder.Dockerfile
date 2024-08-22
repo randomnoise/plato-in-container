@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM rust:1.78-slim-bookworm AS plato-builder-base
+FROM rust:1.80-slim-bookworm AS plato-builder-base
 
     ARG PLATO_CURRENT_VERSION=0.9.42
 
