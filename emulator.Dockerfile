@@ -107,7 +107,15 @@ FROM plato-emulator-base AS plato-emulator
 
     # for faster compile time, copy files compiled in plato-emulator-libs stage
     COPY --from=plato-emulator-libs /usr/src/plato/target/ /usr/src/plato/target/
-    COPY . /usr/src/plato/
     COPY --from=plato-emulator-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
+
+    # to use rust-gdb
+    RUN apt-get update \
+     && apt-get install --no-install-recommends --yes \
+        gdb \
+     && apt-get clean \
+     && rm --recursive --force /var/lib/apt/lists/*
+
+    COPY . /usr/src/plato/
 
     CMD [ "./run-emulator.sh" ]
