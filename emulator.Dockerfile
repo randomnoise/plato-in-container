@@ -37,7 +37,7 @@ FROM mupdf-file AS mupdf-libs
     && cd mupdf-${MUPDF_VERSION}-source \
     && make prefix=/usr/local install
 
-FROM rust:1.81-slim-bookworm AS plato-emulator-base
+FROM rust:1.82-slim-bookworm AS plato-emulator-base
 
     COPY --from=mupdf-libs /usr/local/bin/ /usr/local/bin/
     COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
