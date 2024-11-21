@@ -8,7 +8,7 @@ FROM rust:1.82-slim-bookworm AS plato-builder-base
     ARG DEBIAN_FRONTEND=noninteractive
     RUN dpkg --add-architecture armhf \
      && apt-get update \
-     && apt-get install --no-install-recommends --yes \
+     && apt-get install --yes --no-install-recommends \
         jq \
         patchelf \
         pkg-config \
@@ -17,20 +17,15 @@ FROM rust:1.82-slim-bookworm AS plato-builder-base
      #  add armhf as target to rust
      && rustup target add arm-unknown-linux-gnueabihf \
      #  clean up stuff
-     && rm --recursive --force \
-        /var/lib/apt/lists/* \
-        /usr/share/doc/ \
-        /usr/share/man/ \
-        /tmp/* \
-        /var/tmp/* \
-     && apt-get clean
+     && apt-get clean \
+     && rm --recursive --force /var/lib/apt/lists/*
 
     ENV PATH=/gcc-linaro/bin:$PATH
 
 FROM plato-builder-base AS plato-builder-libs
 
     RUN apt-get update \
-     && apt-get install --no-install-recommends --yes \
+     && apt-get install --yes --no-install-recommends \
         cmake \
         git \
         make \

@@ -19,7 +19,7 @@ FROM mupdf-file AS mupdf-libs
     # MuPDF dependencies:
     # https://mupdf.readthedocs.io/en/latest/quick-start-guide.html#linux
     RUN apt-get update \
-    && apt-get install --no-install-recommends --yes \
+    && apt-get install --yes --no-install-recommends \
         make \
         g++ \
         mesa-common-dev \
@@ -44,7 +44,7 @@ FROM rust:1.82-slim-bookworm AS plato-emulator-base
     COPY --from=mupdf-libs /usr/local/include/ /usr/local/include/
 
     RUN apt-get update \
-    && apt-get install --no-install-recommends --yes \
+    && apt-get install --yes --no-install-recommends \
         cmake \
         libstdc++-12-dev \
         libsdl2-dev \
@@ -56,14 +56,7 @@ FROM rust:1.82-slim-bookworm AS plato-emulator-base
         make \
     # clean up
     && apt-get clean \
-    && rm --recursive --force \
-        /var/lib/apt/lists/* \
-        /usr/share/doc/ \
-        /usr/share/man/ \
-        /usr/local/share/doc/* \
-        /usr/local/share/man/* \
-        /tmp/* \
-        /var/tmp/*
+    && rm --recursive --force /var/lib/apt/lists/*
 
     ENV CARGO_TARGET_OS=linux
 
@@ -74,7 +67,7 @@ FROM plato-emulator-base AS plato-emulator-libs
     ARG MUPDF_VERSION
 
     RUN apt-get update \
-    && apt-get install --no-install-recommends --yes \
+    && apt-get install --yes --no-install-recommends \
         git \
     # clean up
     && apt-get clean \
