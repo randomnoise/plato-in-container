@@ -19,6 +19,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        submodules: 'true'
 
     # Extract metadata (tags, labels) for Docker
     # https://github.com/docker/metadata-action
