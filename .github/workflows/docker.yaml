@@ -27,7 +27,7 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-        tags: type=edge
+        tags: type=edge,branch=simpler-builder
 
     - name: Log into registry ${{ env.REGISTRY }}
       uses: docker/login-action@v3
