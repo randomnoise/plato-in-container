@@ -42,9 +42,9 @@ RUN apt-get update \
  && apt-get clean \
  && rm --recursive --force /var/lib/apt/lists/*
 
-COPY . /usr/src/plato/
-
 WORKDIR /usr/src/plato
+
+COPY . .
 
 RUN ./build.sh
 
