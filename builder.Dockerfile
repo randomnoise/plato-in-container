@@ -46,6 +46,6 @@ WORKDIR /usr/src/plato
 
 COPY . .
 
-RUN ./build.sh
+RUN ls -lAF
 
 CMD ["./build.sh"]
