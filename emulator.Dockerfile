@@ -61,19 +61,9 @@ FROM plato-emulator-base AS plato-emulator-libs
 
     ARG MUPDF_VERSION
 
-    RUN apt-get update \
-     && apt-get install --yes --no-install-recommends \
-        git \
-     ## clean up
-     && apt-get clean \
-     && rm --recursive --force /var/lib/apt/lists/*
-
-    # Download and build plato's parts
-    RUN cd /usr/src/ \
-     && git clone --depth 1 https://github.com/baskerville/plato.git \
-     && git config --global --add safe.directory /usr/src/plato
-
+    COPY . .
     COPY --from=mupdf-libs /mupdf-${MUPDF_VERSION}-source.tar.gz /usr/src/plato/thirdparty/
+
     RUN cd /usr/src/plato/thirdparty/ \
      && mkdir -p mupdf \
      && tar -xz --strip-components 1 --directory mupdf \
@@ -93,17 +83,6 @@ FROM plato-emulator-base AS plato-emulator
     COPY --from=plato-emulator-libs $CARGO_HOME/registry/index/ $CARGO_HOME/registry/index/
     COPY --from=plato-emulator-libs $CARGO_HOME/registry/cache/ $CARGO_HOME/registry/cache/
 
-    # for faster compile time, copy files compiled in plato-emulator-libs stage
-    COPY --from=plato-emulator-libs /usr/src/plato/target/ /usr/src/plato/target/
-    COPY --from=plato-emulator-libs /usr/src/plato/thirdparty/mupdf/ /usr/src/plato/thirdparty/mupdf/
-
-    # to use rust-gdb
-    RUN apt-get update \
-     && apt-get install --no-install-recommends --yes \
-        gdb \
-     && apt-get clean \
-     && rm --recursive --force /var/lib/apt/lists/*
-
-    COPY . /usr/src/plato/
+    COPY --from=plato-emulator-libs /usr/src/plato/ /usr/src/plato/
 
     CMD [ "./run-emulator.sh" ]
