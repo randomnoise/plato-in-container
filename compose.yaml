@@ -14,10 +14,7 @@ services:
           target: /usr/src/plato/crates/
 
   plato-emulator:
-    build:
-      context: ./plato
-      dockerfile: ../emulator.Dockerfile
-    image: local-plato:emulator
+    image: ghcr.io/randomnoise/plato-emulator:latest
     devices:
       - /dev/dri/card0
     environment:
