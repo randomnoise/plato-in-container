@@ -25,6 +25,7 @@ services:
       - ~/.Xauthority:/root/.Xauthority
       - /etc/localtime:/etc/localtime:ro
       - ./logs:/usr/src/plato/logs
+      - /tmp/.X11-unix:/tmp/.X11-unix
     develop:
       watch:
         - action: sync+restart
