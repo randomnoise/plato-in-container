@@ -25,6 +25,7 @@ services:
       - ~/.Xauthority:/root/.Xauthority
       - /etc/localtime:/etc/localtime:ro
       - ./logs:/usr/src/plato/logs
+      # WSLg reference: github.com/microsoft/wslg/blob/d14b392/samples/container/Containers.md
       - /tmp/.X11-unix:/tmp/.X11-unix
     develop:
       watch:
