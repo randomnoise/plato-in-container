@@ -47,8 +47,6 @@ FROM rust:1.87-slim-bookworm AS plato-emulator-base
         libgumbo-dev \
         libopenjp2-7-dev \
         libjbig2dec0-dev \
-     ## clean up
-     && apt-get clean \
      && rm --recursive --force /var/lib/apt/lists/*
 
     WORKDIR /usr/src/plato

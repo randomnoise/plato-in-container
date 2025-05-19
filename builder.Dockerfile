@@ -11,8 +11,6 @@ RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
     tar \
     xz-utils \
-### Cleanup
- && apt-get clean \
  && rm --recursive --force /var/lib/apt/lists/* \
 ### extract Linaro GCC
  && tar --extract --xz --file gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz \
@@ -38,8 +36,6 @@ RUN apt-get update \
     xz-utils \
 ### add armhf as target to rust
  && rustup target add arm-unknown-linux-gnueabihf \
-### clean up stuff
- && apt-get clean \
  && rm --recursive --force /var/lib/apt/lists/*
 
 WORKDIR /usr/src/plato
