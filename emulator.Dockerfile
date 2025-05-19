@@ -19,22 +19,16 @@ FROM rust:1.87-slim-bookworm AS mupdf-libs
     RUN apt-get update \
      && apt-get install --yes --no-install-recommends \
         g++ \
-        libgl1-mesa-dev \
-        libglu1-mesa-dev \
-        libxcursor-dev \
-        libxrandr-dev \
         make \
-        mesa-common-dev \
-        xorg-dev
+        pkg-config
 
     ### extract and build MuPDF
     RUN tar --extract --gzip --file mupdf-${MUPDF_VERSION}-source.tar.gz \
      && cd mupdf-${MUPDF_VERSION}-source \
-     && make HAVE_X11=no HAVE_GLUT=no prefix=/usr/local install
+     && make HAVE_X11=no HAVE_GLUT=no prefix=/usr/local install-libs
 
 FROM rust:1.87-slim-bookworm AS plato-emulator-base
 
-    COPY --from=mupdf-libs /usr/local/bin/ /usr/local/bin/
     COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
     COPY --from=mupdf-libs /usr/local/include/ /usr/local/include/
 
