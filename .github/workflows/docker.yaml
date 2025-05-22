@@ -96,3 +96,18 @@ jobs:
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
+
+  image-layers:
+    needs: [builder, emulator]
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check image layers
+      run: |
+        set -eux -o pipefail
+        docker pull ghcr.io/randomnoise/plato-builder
+        docker pull ghcr.io/randomnoise/plato-emulator
+        docker images
+        docker image history ghcr.io/randomnoise/plato-builder
+        docker image history ghcr.io/randomnoise/plato-emulator
