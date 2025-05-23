@@ -9,11 +9,12 @@ env:
   REGISTRY: ghcr.io
 
 jobs:
-  builder:
-    env:
-      IMAGE_NAME: plato-builder
-
+  docker-build:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        purpose: [builder, emulator]
 
     permissions:
       packages: write
@@ -31,7 +32,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
         flavor: latest=true
 
     - name: Log into registry ${{ env.REGISTRY }}
@@ -47,58 +48,14 @@ jobs:
       id: build-and-push
       uses: docker/build-push-action@v6
       with:
-        file: builder.Dockerfile
-        context: ./plato
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-
-  emulator:
-    env:
-      IMAGE_NAME: plato-emulator
-
-    runs-on: ubuntu-latest
-
-    permissions:
-      packages: write
-      contents: read
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: 'true'
-
-    # Extract metadata (tags, labels) for Docker
-    # https://github.com/docker/metadata-action
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-        flavor: latest=true
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    # Build and push Docker image with Buildx (don't push on PR)
-    # https://github.com/docker/build-push-action
-    - name: Build and push Docker image
-      id: build-and-push
-      uses: docker/build-push-action@v6
-      with:
-        file: emulator.Dockerfile
+        file: ${{ matrix.purpose }}.Dockerfile
         context: ./plato
         push: ${{ github.event_name != 'pull_request' }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
   image-layers:
-    needs: [builder, emulator]
+    needs: docker-build
 
     runs-on: ubuntu-latest
 
