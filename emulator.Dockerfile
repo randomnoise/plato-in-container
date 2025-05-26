@@ -34,13 +34,13 @@ FROM rust:1.87-slim-bookworm AS plato-emulator-base
 
     RUN apt-get update \
      && apt-get install --yes --no-install-recommends \
-        libstdc++-12-dev \
-        libsdl2-dev \
         libdjvulibre-dev \
-        libharfbuzz-dev \
         libgumbo-dev \
-        libopenjp2-7-dev \
+        libharfbuzz-dev \
         libjbig2dec0-dev \
+        libopenjp2-7-dev \
+        libsdl2-dev \
+        libstdc++-12-dev \
      && rm --recursive --force /var/lib/apt/lists/*
 
     WORKDIR /usr/src/plato
