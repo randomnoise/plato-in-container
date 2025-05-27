@@ -6,8 +6,7 @@ ARG MUPDF_FILE_CHECKSUM=ec9e63a7cdd0f50569f240f91f048f37fa972c47
 
 FROM rust:1.87-slim-bookworm AS mupdf-libs
 
-    ARG MUPDF_VERSION
-    ARG MUPDF_FILE_CHECKSUM
+    ARG MUPDF_VERSION MUPDF_FILE_CHECKSUM
 
     ADD https://mupdf.com/downloads/archive/mupdf-${MUPDF_VERSION}-source.tar.gz /
     ### control sha1 checksum
@@ -29,17 +28,14 @@ FROM rust:1.87-slim-bookworm AS mupdf-libs
 
 FROM rust:1.87-slim-bookworm AS plato-emulator
 
-    ARG MUPDF_VERSION
-
     COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
-    COPY --from=mupdf-libs /usr/local/include/ /usr/local/include/
+    COPY --from=mupdf-libs /usr/local/include/mupdf/ /usr/local/include/mupdf/
 
-    WORKDIR /usr/src/plato
     COPY . /usr/src/plato
-    COPY --from=mupdf-libs /mupdf-${MUPDF_VERSION}-source.tar.gz /usr/src/plato/thirdparty/
 
     RUN apt-get update \
      && apt-get install --yes --no-install-recommends \
+        git \
         libdjvulibre-dev \
         libgumbo-dev \
         libharfbuzz-dev \
@@ -47,19 +43,20 @@ FROM rust:1.87-slim-bookworm AS plato-emulator
         libopenjp2-7-dev \
         libsdl2-dev \
         libstdc++-12-dev \
+        wget \
      && rm --recursive --force /var/lib/apt/lists/* \
-     ## extract MuPDF files
+     ## download and extract MuPDF files
      && cd /usr/src/plato/thirdparty/ \
-     && mkdir -p mupdf \
-     && tar -xz --strip-components 1 --directory mupdf \
-        --file mupdf-${MUPDF_VERSION}-source.tar.gz \
-     && rm --verbose mupdf-${MUPDF_VERSION}-source.tar.gz \
-     ## Build MuPDF wrapper
+     && ./download.sh mupdf \
+     ## build MuPDF wrapper
      && cd /usr/src/plato/mupdf_wrapper \
      && ./build.sh \
-     ## Build Plato Emulator
+     ## build Plato Emulator
      && cd /usr/src/plato \
-     && cargo test \
-     && cargo build --all-features
+     && cargo build --package emulator \
+     ## remove unnecessary packages
+     && apt-get purge --yes --autoremove git wget
+
+    WORKDIR /usr/src/plato
 
     CMD [ "./run-emulator.sh" ]
