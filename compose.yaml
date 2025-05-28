@@ -27,8 +27,4 @@ services:
       - ./logs:/usr/src/plato/logs
       # WSLg reference: github.com/microsoft/wslg/blob/d14b392/samples/container/Containers.md
       - /tmp/.X11-unix:/tmp/.X11-unix
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./plato/crates/
-          target: /usr/src/plato/crates/
+      - ./plato/crates:/usr/src/plato/crates:ro
