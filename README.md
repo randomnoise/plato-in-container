@@ -6,7 +6,7 @@ Emulator and builder Docker containers for [Plato](https://github.com/baskervill
 
 The `Plato` Docker images are designed as `development containers`, designed to minimize `cargo build` time during the container execution time, to compile and test `Plato`'s code as fast as possible.
 
-Currently, Docker images are prototypes and work-in-progress; the Docker images are fat (`builder`: ~1.8GB, `emulator`: ~3.1GB), `docker build` can take a long time and the containers probably run with more than necessary [options](https://docs.docker.com/engine/reference/run/#options).
+Currently, Docker images are somewhat optimized and work-in-progress; but the Docker images are fat (`builder`: ~1.8GB, `emulator`: ~2.5GB), `docker build` can take a long time and the containers probably run with more than necessary [options](https://docs.docker.com/engine/reference/run/#options).
 
 ## Motivation
 
@@ -16,7 +16,7 @@ Inspired by [Jessie Frazelle](https://github.com/jessfraz)'s old blog post about
 
 ## Usage
 
-Initially, get the original `Plato` repo:
+Initially, clone this repo and then get the original `Plato` repo with:
 ```sh
 $ cd plato-in-container
 $ git submodule update --init
@@ -26,22 +26,25 @@ $ git submodule update --init
 
 For building and getting the package ready for using on Kobo e-readers:
 ```sh
-$ docker compose build plato-builder
 $ docker compose run --rm plato-builder
 ```
 or
 
 ```sh
-$ docker compose build
 $ docker compose run --rm plato-builder bash
-in-container$ ./build.sh && ./dist.sh
+# ./build.sh && ./dist.sh
 ```
 
 ### Emulator
 
 For running the emulator and accessing the graphics device inside the container:
 ```sh
-$ docker compose build plato-emulator
+$ docker compose run --rm plato-emulator bash
+# ./run-emulator.sh
+```
+or
+
+```sh
 $ docker compose run --rm plato-emulator
 ```
 
