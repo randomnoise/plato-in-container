@@ -57,17 +57,10 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-  image-layers:
-    needs: docker-build
-
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Check image layers
+      id: check-layers
       run: |
         set -eux -o pipefail
-        docker pull ghcr.io/randomnoise/plato-builder
-        docker pull ghcr.io/randomnoise/plato-emulator
+        docker pull ${{ env.IMAGE_NAME }}
         docker images
-        docker image history ghcr.io/randomnoise/plato-builder
-        docker image history ghcr.io/randomnoise/plato-emulator
+        docker image history ${{ env.IMAGE_NAME }}
