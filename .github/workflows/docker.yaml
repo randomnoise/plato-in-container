@@ -16,6 +16,9 @@ jobs:
       matrix:
         purpose: [builder, emulator]
 
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
+
     permissions:
       packages: write
       contents: read
@@ -32,7 +35,7 @@ jobs:
       id: meta
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
+        images: ${{ env.IMAGE_NAME }}
         flavor: latest=true
 
     - name: Log into registry ${{ env.REGISTRY }}
