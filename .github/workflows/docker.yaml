@@ -1,6 +1,6 @@
 name: Docker CI
 
-on: push
+on: [push, pull_request]
 
 env:
   REGISTRY: ghcr.io
@@ -17,8 +17,9 @@ jobs:
       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
 
     # Experiments:
-    # [] Can I read env.IMAGE_NAME?
-    # [] Can I print git event name?
+    # [x] Can I read env.IMAGE_NAME?
+    # [x] Can I print git event name?
+    # [] Can I recognize pull requests?
     # [] Can I use if conditions for steps?
 
     steps:
@@ -28,4 +29,3 @@ jobs:
         echo ${{ env.IMAGE_NAME }}
         echo ${{ github.event_name }}
         echo ${{ github.event_name != 'pull_request' }}
-        docker image history ${{ env.IMAGE_NAME }}
