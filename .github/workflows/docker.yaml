@@ -2,8 +2,19 @@ name: Docker CI
 
 on:
   push:
-    branches:
-      - main
+    branches: main
+    paths:
+      - '*.Dockerfile'
+      - '*.Dockerfile.dockerignore'
+      - .github/workflows/docker.yaml
+      - plato
+  pull_request:
+    branches: main
+    paths:
+      - '*.Dockerfile'
+      - '*.Dockerfile.dockerignore'
+      - .github/workflows/docker.yaml
+      - plato
 
 env:
   REGISTRY: ghcr.io
@@ -33,12 +44,14 @@ jobs:
     # https://github.com/docker/metadata-action
     - name: Extract Docker metadata
       id: meta
+      if: ${{ github.event_name != 'pull_request' }}
       uses: docker/metadata-action@v5
       with:
         images: ${{ env.IMAGE_NAME }}
         flavor: latest=true
 
     - name: Log into registry ${{ env.REGISTRY }}
+      if: ${{ github.event_name != 'pull_request' }}
       uses: docker/login-action@v3
       with:
         registry: ${{ env.REGISTRY }}
@@ -59,6 +72,7 @@ jobs:
 
     - name: Check image layers
       id: check-layers
+      if: ${{ github.event_name != 'pull_request' }}
       run: |
         set -eux -o pipefail
         docker pull ${{ env.IMAGE_NAME }}
