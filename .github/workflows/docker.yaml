@@ -1,9 +1,6 @@
 name: Docker CI
 
-on:
-  push:
-    branches:
-      - main
+on: push
 
 env:
   REGISTRY: ghcr.io
@@ -19,48 +16,16 @@ jobs:
     env:
       IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
 
-    permissions:
-      packages: write
-      contents: read
+    # Experiments:
+    # [] Can I read env.IMAGE_NAME?
+    # [] Can I print git event name?
+    # [] Can I use if conditions for steps?
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        submodules: 'true'
-
-    # Extract metadata (tags, labels) for Docker
-    # https://github.com/docker/metadata-action
-    - name: Extract Docker metadata
-      id: meta
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.IMAGE_NAME }}
-        flavor: latest=true
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    # Build and push Docker image with Buildx (don't push on PR)
-    # https://github.com/docker/build-push-action
-    - name: Build and push Docker image
-      id: build-and-push
-      uses: docker/build-push-action@v6
-      with:
-        file: ${{ matrix.purpose }}.Dockerfile
-        context: ./plato
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
-
-    - name: Check image layers
-      id: check-layers
       run: |
         set -eux -o pipefail
-        docker pull ${{ env.IMAGE_NAME }}
-        docker images
+        echo ${{ env.IMAGE_NAME }}
+        echo ${{ github.event_name }}
+        echo ${{ github.event_name != 'pull_request' }}
         docker image history ${{ env.IMAGE_NAME }}
