@@ -2,8 +2,19 @@ name: Docker CI
 
 on:
   push:
-    branches:
-      - main
+    branches: main
+    paths:
+      - '*.Dockerfile'
+      - '*.Dockerfile.dockerignore'
+      - .github/workflows/docker.yaml
+      - plato
+  pull_request:
+    branches: main
+    paths:
+      - '*.Dockerfile'
+      - '*.Dockerfile.dockerignore'
+      - .github/workflows/docker.yaml
+      - plato
 
 env:
   REGISTRY: ghcr.io
@@ -15,6 +26,9 @@ jobs:
     strategy:
       matrix:
         purpose: [builder, emulator]
+
+    env:
+      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
 
     permissions:
       packages: write
@@ -30,12 +44,14 @@ jobs:
     # https://github.com/docker/metadata-action
     - name: Extract Docker metadata
       id: meta
+      if: ${{ github.event_name != 'pull_request' }}
       uses: docker/metadata-action@v5
       with:
-        images: ${{ env.REGISTRY }}/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
+        images: ${{ env.IMAGE_NAME }}
         flavor: latest=true
 
     - name: Log into registry ${{ env.REGISTRY }}
+      if: ${{ github.event_name != 'pull_request' }}
       uses: docker/login-action@v3
       with:
         registry: ${{ env.REGISTRY }}
@@ -54,17 +70,11 @@ jobs:
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
-  image-layers:
-    needs: docker-build
-
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Check image layers
+      id: check-layers
+      if: ${{ github.event_name != 'pull_request' }}
       run: |
         set -eux -o pipefail
-        docker pull ghcr.io/randomnoise/plato-builder
-        docker pull ghcr.io/randomnoise/plato-emulator
+        docker pull ${{ env.IMAGE_NAME }}
         docker images
-        docker image history ghcr.io/randomnoise/plato-builder
-        docker image history ghcr.io/randomnoise/plato-emulator
+        docker image history ${{ env.IMAGE_NAME }}
