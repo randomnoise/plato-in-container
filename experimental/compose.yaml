@@ -1,0 +1,16 @@
+services:
+  experimental-just-dpkgs:
+    build:
+      context: ..
+      dockerfile: experimental/just-dpkgs.Dockerfile
+    image: local-plato:just-dpkgs
+    devices:
+      - /dev/dri/card0
+    environment:
+      - DISPLAY=unix${DISPLAY}
+      - RUST_LOG=debug
+    network_mode: "host"
+    volumes:
+      - ~/.Xauthority:/root/.Xauthority
+      - /etc/localtime:/etc/localtime:ro
+      # - /tmp/.X11-unix:/tmp/.X11-unix
