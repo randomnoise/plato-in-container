@@ -1,0 +1,25 @@
+diff --git a/crates/core/build.rs b/crates/core/build.rs
+index e3ab3e0..835c8c9 100644
+--- a/crates/core/build.rs
++++ b/crates/core/build.rs
+@@ -16,6 +16,7 @@ fn main() {
+             "linux" => {
+                 println!("cargo:rustc-link-search=target/mupdf_wrapper/Linux");
+                 println!("cargo:rustc-link-lib=dylib=stdc++");
++                println!("cargo:rustc-link-lib=mujs");
+             },
+             "macos" => {
+                 println!("cargo:rustc-link-search=target/mupdf_wrapper/Darwin");
+diff --git a/crates/core/src/document/mupdf_sys.rs b/crates/core/src/document/mupdf_sys.rs
+index 2bcac49..110deeb 100644
+--- a/crates/core/src/document/mupdf_sys.rs
++++ b/crates/core/src/document/mupdf_sys.rs
+@@ -3,7 +3,7 @@
+ use std::mem;
+
+ pub const FZ_MAX_COLORS: usize = 32;
+-pub const FZ_VERSION: &str = "1.23.11";
++pub const FZ_VERSION: &str = "1.21.1";
+
+ pub const FZ_META_INFO_AUTHOR: &str = "info:Author";
+ pub const FZ_META_INFO_TITLE: &str = "info:Title";
