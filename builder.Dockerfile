@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM rust:1.87-slim-bookworm AS linaro-files
+FROM rust:1.88-slim-bookworm AS linaro-files
 
 # Linaro GCC's checksum is same with the Kobo Reader's toolchain Git LFS file reference:
 # https://github.com/kobolabs/Kobo-Reader/blob/master/toolchain/gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz
@@ -17,7 +17,7 @@ RUN apt-get update \
  && mv --verbose /gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf/ /gcc-linaro/ \
  && rm --verbose /gcc-linaro-4.9.4-2017.01-x86_64_arm-linux-gnueabihf.tar.xz
 
-FROM rust:1.87-slim-bookworm
+FROM rust:1.88-slim-bookworm
 
 # add Linaro GCC to $PATH
 COPY --from=linaro-files /gcc-linaro/ /gcc-linaro/
