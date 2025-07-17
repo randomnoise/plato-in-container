@@ -1,9 +1,6 @@
 services:
   plato-builder:
-    build:
-      context: ./plato
-      dockerfile: ../builder.Dockerfile
-    image: local-plato:builder
+    image: ghcr.io/randomnoise/plato-builder:latest
     volumes:
       - ./dist:/usr/src/plato/dist
     develop:
