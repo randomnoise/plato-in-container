@@ -3,11 +3,7 @@ services:
     image: ghcr.io/randomnoise/plato-builder:latest
     volumes:
       - ./dist:/usr/src/plato/dist
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./plato/crates/
-          target: /usr/src/plato/crates/
+      - ./plato/crates:/usr/src/plato/crates:ro
 
   plato-emulator:
     image: ghcr.io/randomnoise/plato-emulator:latest
