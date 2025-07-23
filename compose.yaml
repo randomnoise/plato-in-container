@@ -1,17 +1,9 @@
 services:
   plato-builder:
-    build:
-      context: ./plato
-      dockerfile: ../builder.Dockerfile
-    image: local-plato:builder
+    image: ghcr.io/randomnoise/plato-builder:latest
     volumes:
       - ./dist:/usr/src/plato/dist
-      - ./logs:/usr/src/plato/logs
-    develop:
-      watch:
-        - action: sync+restart
-          path: ./plato/crates/
-          target: /usr/src/plato/crates/
+      - ./plato/crates:/usr/src/plato/crates:ro
 
   plato-emulator:
     image: ghcr.io/randomnoise/plato-emulator:latest
@@ -24,7 +16,6 @@ services:
     volumes:
       - ~/.Xauthority:/root/.Xauthority
       - /etc/localtime:/etc/localtime:ro
-      - ./logs:/usr/src/plato/logs
       # WSLg reference: github.com/microsoft/wslg/blob/d14b392/samples/container/Containers.md
       - /tmp/.X11-unix:/tmp/.X11-unix
       - ./plato/crates:/usr/src/plato/crates:ro
