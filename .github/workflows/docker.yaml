@@ -48,7 +48,10 @@ jobs:
       uses: docker/metadata-action@v5
       with:
         images: ${{ env.IMAGE_NAME }}
-        flavor: latest=true
+        tags: |
+          # github.com/docker/metadata-action#latest-tag
+          # set latest tag for default branch
+          type=raw,value=latest,enable={{is_default_branch}}
 
     - name: Log into registry ${{ env.REGISTRY }}
       if: ${{ github.event_name != 'pull_request' }}
