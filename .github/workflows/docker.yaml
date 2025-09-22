@@ -18,6 +18,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
+  CARGO_TERM_COLOR: always
 
 jobs:
   docker-build:
