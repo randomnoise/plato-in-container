@@ -4,7 +4,7 @@ ARG MUPDF_VERSION=1.23.11
 # sha1 checksum: https://mupdf.com/releases/
 ARG MUPDF_FILE_CHECKSUM=ec9e63a7cdd0f50569f240f91f048f37fa972c47
 
-FROM rust:1.89-slim-bookworm AS mupdf-libs
+FROM rust:1.90-slim-bookworm AS mupdf-libs
 
     ARG MUPDF_VERSION MUPDF_FILE_CHECKSUM
 
@@ -26,7 +26,7 @@ FROM rust:1.89-slim-bookworm AS mupdf-libs
      && cd mupdf-${MUPDF_VERSION}-source \
      && make HAVE_X11=no HAVE_GLUT=no prefix=/usr/local install-libs
 
-FROM rust:1.89-slim-bookworm AS plato-emulator
+FROM rust:1.90-slim-bookworm AS plato-emulator
 
     COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
     COPY --from=mupdf-libs /usr/local/include/mupdf/ /usr/local/include/mupdf/
