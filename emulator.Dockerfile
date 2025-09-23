@@ -33,6 +33,10 @@ FROM rust:1.90-slim-bookworm AS plato-emulator
 
     COPY . /usr/src/plato
 
+    # TODO: linker problem with lld Rust 1.90.0+
+    # blog.rust-lang.org/2025/09/01/rust-lld-on-1.90.0-stable/#possible-drawbacks
+    ENV RUSTFLAGS="-C linker-features=-lld"
+
     RUN apt-get update \
      && apt-get install --yes --no-install-recommends \
         git \
