@@ -63,3 +63,6 @@ I didn't want to burden the maintainer with a similar PR without a track record.
 For reference, the previous Dockerfiles' history:
 - [Dockerfile commits (builder)](https://github.com/baskerville/plato/commits/master/Dockerfile)
 - [Dockerfile.dev commits (emulator)](https://github.com/baskerville/plato/commits/master/Dockerfile.dev)
+
+Another (also somewhat older and obsolete) docker image repo:
+- [HaoZeke/docker_platoBuilder](https://github.com/HaoZeke/docker_platoBuilder)
