@@ -56,10 +56,13 @@ Home Screen  |  Reader Screen
 
 ## Rationale
 
-The reason `Plato in Container` is a separate repository and not a part of the original [Plato](https://github.com/baskerville/plato) repo is that these are not the first attempt at creating `docker image`s for Plato. It appears the previous `Dockerfile`s were removed from Plato's repo because of a [lack of maintenance](https://github.com/baskerville/plato/commit/573a573) and it seems that Plato's maintainer was [not using](https://github.com/baskerville/plato/issues/255#issuecomment-1230743385) them. On the under hand, `emulator` image required `MuPDF` libraries to be installed on the host.
+The reason `plato-in-container` is a separate repository and not a part of the original [Plato](https://github.com/baskerville/plato) repo is that these are not the first attempt at creating docker images for Plato. It appears the previous `Dockerfile`s were removed from Plato's repo because of a [lack of maintenance](https://github.com/baskerville/plato/commit/573a573) and it seems that Plato's maintainer was [not using](https://github.com/baskerville/plato/issues/255#issuecomment-1230743385) them. On the other hand, `emulator` image required `MuPDF` libraries to be installed on the host.
 
-I don't want to burden the maintainer with a similar PR without a track record. The separate repo also opens up an opportunity to experiment with Docker using `git subtrees`, `git submodules` and `symbolic links` to the locally cloned repo directories.
+I didn't want to burden the maintainer with a similar PR without a track record. The separate repo also opens up an opportunity to experiment with Docker using `git subtrees`, `git submodules` and `symbolic links` to the locally cloned repo directories.
 
 For reference, the previous Dockerfiles' history:
 - [Dockerfile commits (builder)](https://github.com/baskerville/plato/commits/master/Dockerfile)
 - [Dockerfile.dev commits (emulator)](https://github.com/baskerville/plato/commits/master/Dockerfile.dev)
+
+Another (also somewhat older and obsolete) docker image repo:
+- [HaoZeke/docker_platoBuilder](https://github.com/HaoZeke/docker_platoBuilder)
