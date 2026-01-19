@@ -2,37 +2,11 @@ name: Docker CI
 
 on:
   push:
-    branches: main
-    paths:
-      - '*.Dockerfile'
-      - '*.Dockerfile.dockerignore'
-      - .github/workflows/docker.yaml
-      - plato
-  pull_request:
-    branches: main
-    paths:
-      - '*.Dockerfile'
-      - '*.Dockerfile.dockerignore'
-      - .github/workflows/docker.yaml
-      - plato
-
-env:
-  REGISTRY: ghcr.io
+    branches: ci-run-*
 
 jobs:
   docker-build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        purpose: [builder, emulator]
-
-    env:
-      IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/plato-${{ matrix.purpose }}
-
-    permissions:
-      packages: write
-      contents: read
 
     steps:
     - name: Checkout repository
@@ -40,44 +14,15 @@ jobs:
       with:
         submodules: 'true'
 
-    # Extract metadata (tags, labels) for Docker
-    # https://github.com/docker/metadata-action
-    - name: Extract Docker metadata
-      id: meta
-      if: ${{ github.event_name != 'pull_request' }}
-      uses: docker/metadata-action@v5
-      with:
-        images: ${{ env.IMAGE_NAME }}
-        tags: |
-          # github.com/docker/metadata-action#latest-tag
-          # set latest tag for default branch
-          type=raw,value=latest,enable={{is_default_branch}}
-
-    - name: Log into registry ${{ env.REGISTRY }}
-      if: ${{ github.event_name != 'pull_request' }}
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.REGISTRY }}
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-
-    # Build and push Docker image with Buildx (don't push on PR)
-    # https://github.com/docker/build-push-action
     - name: Build and push Docker image
       id: build-and-push
       uses: docker/build-push-action@v6
       with:
-        file: ${{ matrix.purpose }}.Dockerfile
+        file: emulator.Dockerfile
         context: ./plato
-        push: ${{ github.event_name != 'pull_request' }}
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
 
     - name: Check image layers
       id: check-layers
-      if: ${{ github.event_name != 'pull_request' }}
       run: |
         set -eux -o pipefail
-        docker pull ${{ env.IMAGE_NAME }}
         docker images
-        docker image history ${{ env.IMAGE_NAME }}
