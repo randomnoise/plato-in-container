@@ -50,6 +50,6 @@ RUN apt-get update \
     libsdl2-dev \
  && rm --recursive --force /var/lib/apt/lists/*
 
-COPY --from=build-mupdf /usr/local/bin/ /usr/local/bin/
 COPY --from=build-mupdf /usr/local/lib/ /usr/local/lib/
 COPY --from=build-mupdf /usr/local/include/mupdf/ /usr/local/include/mupdf/
+COPY --from=build-mupdf /usr/local/bin/ /usr/local/bin/
