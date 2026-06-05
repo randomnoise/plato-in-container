@@ -22,7 +22,7 @@ FROM rust:1.92-slim-bookworm AS mupdf-libs
 
 FROM rust:1.92-slim-bookworm AS plato-emulator
 
-    COPY --from=mupdf-libs /usr/local/lib/ /usr/local/lib/
+    COPY --from=mupdf-libs /usr/local/lib/libmupdf*.a /usr/local/lib/
     COPY --from=mupdf-libs /usr/local/include/mupdf/ /usr/local/include/mupdf/
 
     COPY . /usr/src/plato
