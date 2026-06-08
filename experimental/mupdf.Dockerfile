@@ -42,12 +42,13 @@ FROM debian:bookworm AS visual-dependencies
 
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
-    libdjvulibre-dev \
-    libgumbo-dev \
-    libharfbuzz-dev \
-    libjbig2dec0-dev \
-    libopenjp2-7-dev \
-    libsdl2-dev \
+ ## mupdf-x11 dependencies:
+    libx11-6 \
+    libxext6 \
+ ## mupdf-gl dependencies:
+ ## libx11-6 and libxext6 are also included in libgl1
+    libgl1 \
+    libxrandr2 \
  && rm --recursive --force /var/lib/apt/lists/*
 
 COPY --from=build-mupdf /usr/local/lib/libmupdf*.a /usr/local/lib/
