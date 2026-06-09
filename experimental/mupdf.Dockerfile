@@ -14,7 +14,7 @@ ARG MUPDF_SHA256_CHECKSUM=ae2442416de499182d37a526c6fa2bacc7a3bed5a888d113ca0484
 FROM debian:bookworm AS build-mupdf
 
 ### MuPDF dependencies:
-### https://mupdf.readthedocs.io/en/latest/quick-start-guide.html#linux
+### https://mupdf.readthedocs.io/en/latest/guide/install.html#build-on-linux-and-bsd-and-macos
 RUN apt-get update \
  && apt-get install --yes --no-install-recommends \
     g++ \
@@ -33,7 +33,8 @@ ARG MUPDF_VERSION MUPDF_SHA256_CHECKSUM
 ADD --checksum=sha256:${MUPDF_SHA256_CHECKSUM} \
     https://mupdf.com/downloads/archive/mupdf-${MUPDF_VERSION}-source.tar.gz /
 
-### extract and build MuPDF
+### extract and build MuPDF:
+### https://mupdf.readthedocs.io/en/latest/guide/install.html#install-on-linux
 RUN tar --extract --gzip --file mupdf-${MUPDF_VERSION}-source.tar.gz \
  && cd mupdf-${MUPDF_VERSION}-source \
  && make prefix=/usr/local install
