@@ -34,6 +34,7 @@ FROM rust:1.92-slim-bookworm AS plato-emulator
     RUN apt-get update \
      && apt-get install --yes --no-install-recommends \
         git \
+        libbz2-dev \
         libdjvulibre-dev \
         libgumbo-dev \
         libharfbuzz-dev \
