@@ -14,3 +14,16 @@ services:
       - ~/.Xauthority:/root/.Xauthority
       - /etc/localtime:/etc/localtime:ro
       # - /tmp/.X11-unix:/tmp/.X11-unix
+  mupdf:
+    build:
+      context: .
+      dockerfile: mupdf.Dockerfile
+    image: local-mupdf-test
+    devices:
+      - /dev/dri
+    environment:
+      - DISPLAY=unix${DISPLAY}
+    network_mode: "host"
+    volumes:
+      - ~/.Xauthority:/root/.Xauthority
+      # - /tmp/.X11-unix:/tmp/.X11-unix
