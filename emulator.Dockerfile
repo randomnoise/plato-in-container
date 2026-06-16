@@ -1,10 +1,14 @@
 # syntax=docker/dockerfile:1
+
+ARG MUPDF_VERSION=1.27.0
+### sha256 checksum: https://mupdf.com/releases/
+ARG MUPDF_SHA256_CHECKSUM=ae2442416de499182d37a526c6fa2bacc7a3bed5a888d113ca04844484dfe7c6
+
 FROM rust:1.92-slim-bookworm AS mupdf-libs
 
-    ARG MUPDF_VERSION=1.27.0
+    ARG MUPDF_VERSION MUPDF_SHA256_CHECKSUM
 
-    # sha256 checksum: https://mupdf.com/releases/
-    ADD --checksum=sha256:ae2442416de499182d37a526c6fa2bacc7a3bed5a888d113ca04844484dfe7c6 \
+    ADD --checksum=sha256:${MUPDF_SHA256_CHECKSUM} \
         https://mupdf.com/downloads/archive/mupdf-${MUPDF_VERSION}-source.tar.gz /
 
     ### MuPDF dependencies:
